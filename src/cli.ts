@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { getSheet } from './main'
+import { createDatabase } from './main'
 
 require('dotenv').config();
 
@@ -37,7 +37,7 @@ const config = {
 };
 
 (async () => {
-  const stuff = await getSheet(config);
-  console.log(stuff);
+  const db = await createDatabase(config);
+  console.log(db);
 })();
 

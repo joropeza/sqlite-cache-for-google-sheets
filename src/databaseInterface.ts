@@ -29,7 +29,7 @@ export default class DatabaseInterface {
   createTable(data: Array<any>) {
     let columnList = '';
     Object.keys(data[0]).forEach((key) => {
-      columnList += `'${key}' ${sqliteDatatype(data[1][key])},`; // TODO: replace with logic to determine the data type
+      columnList += `'${key}' ${sqliteDatatype(data[1][key])},`; // TODO: primary key
     });
     // remove trailing commas
     columnList = columnList.substring(0, columnList.length - 1);
