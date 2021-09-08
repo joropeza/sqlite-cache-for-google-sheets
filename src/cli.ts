@@ -32,7 +32,8 @@ const config = {
   docId: process.env.DOC_ID || '',
   sheetId: process.env.DAYS_SHEET_ID || '',
   mapFunction,
-  primaryKey: 'Date',
+  primaryKey: 'date',
+  databaseTableName: 'days',
 };
 
 (async () => {
