@@ -1,0 +1,31 @@
+{
+  "name": "sqlite-cache-for-google-sheets",
+  "version": "1.0.0",
+  "description": "Opinionated sqlite cache for sheets.",
+  "main": "./dist/main.js",
+  "types": "./dist/tsc/main.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "dev:server": "NODE_ENV=development ts-node-dev --project tsconfig.json --respawn src/cli.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.172",
+    "@types/node": "^16.7.13",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-plugin-import": "^2.24.2",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "better-sqlite3": "^7.4.3",
+    "dotenv": "^10.0.0",
+    "google-spreadsheet": "^3.1.15",
+    "lodash": "^4.17.21"
+  }
+}
