@@ -1,6 +1,6 @@
 {
   "name": "sqlite-cache-for-google-sheets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Opinionated sqlite cache for sheets.",
   "main": "./dist/main.js",
   "types": "./dist/tsc/main.d.ts",
@@ -11,6 +11,7 @@
   },
   "author": "",
   "license": "ISC",
+  "prepublish": "tsc",
   "devDependencies": {
     "@types/better-sqlite3": "^7.4.0",
     "@types/lodash": "^4.14.172",
@@ -22,6 +23,10 @@
     "eslint-plugin-import": "^2.24.2",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joropeza/sqlite-cache-for-google-sheets.git"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
