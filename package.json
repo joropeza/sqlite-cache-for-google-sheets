@@ -1,6 +1,6 @@
 {
   "name": "sqlite-cache-for-google-sheets",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Opinionated sqlite cache for sheets.",
   "main": "./dist/main.js",
   "types": "./dist/tsc/main.d.ts",

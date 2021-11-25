@@ -6,4 +6,6 @@ export type ConfigInterface = {
   primaryKey: string,
   databaseFilename?: string,
   databaseTableName: string,
-}
+  databaseNormalizedTableName?: string // optional normalized table
+  databaseNormalizedTableColumnsToSkip?: Array<string>,
+};

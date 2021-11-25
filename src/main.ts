@@ -10,5 +10,6 @@ export const createDatabase = async (config: ConfigInterface): Promise<betterSql
   const databaseInterface = new DatabaseInterface(config);
   await databaseInterface.createTable(data);
   await databaseInterface.seed(data);
+  await databaseInterface.createNormalizedTable({ data, ...config });
   return databaseInterface.db;
-}
+};
