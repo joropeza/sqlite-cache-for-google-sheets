@@ -1,3 +1,9 @@
+export interface BreakoutColumn {
+  column: string,
+  delimiter: string,
+  databaseTableName: string,
+}
+
 export type ConfigInterface = {
   apiKey: string,
   docId: string,
@@ -8,4 +14,5 @@ export type ConfigInterface = {
   databaseTableName: string,
   databaseNormalizedTableName?: string // optional normalized table
   databaseNormalizedTableColumnsToSkip?: Array<string>,
+  columnsToBreakoutIntoTheirOwnTables?: Array<BreakoutColumn>
 };

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const mapFunction = (match: any) => ({
   date: match.Date,
-  things: match.Things,
+  tags: match.Tags,
 });
 
 const config = {
@@ -16,10 +16,11 @@ const config = {
   mapFunction,
   primaryKey: 'date',
   databaseTableName: 'days',
+  databaseFilename: './cache.db',
+  columnsToBreakoutIntoTheirOwnTables: [{ column: 'tags', delimiter: ',', databaseTableName: 'tags' }],
 };
 
 (async () => {
   const db = await createDatabase(config);
   console.log(db);
 })();
-

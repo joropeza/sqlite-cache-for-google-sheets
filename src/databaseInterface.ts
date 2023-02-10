@@ -1,13 +1,15 @@
+/* eslint-disable no-plusplus */
 import betterSqlLite from 'better-sqlite3';
 
-const Database = require('better-sqlite3');
+import { BreakoutColumn, ConfigInterface } from './types';
 
-import { ConfigInterface } from './types';
+const Database = require('better-sqlite3');
 
 interface CreateNormalizedTableConfig {
   databaseNormalizedTableName?: string | undefined,
   databaseNormalizedTableColumnsToSkip?: Array<string>,
   primaryKey: string | undefined,
+  columnsToBreakoutIntoTheirOwnTables?: Array<BreakoutColumn>
   data: Array<any>
 }
 
@@ -65,8 +67,34 @@ export default class DatabaseInterface {
     });
   }
 
+  createColumnBreakoutTables(config: CreateNormalizedTableConfig) {
+    if (config.columnsToBreakoutIntoTheirOwnTables
+      && config.columnsToBreakoutIntoTheirOwnTables.length > 0) {
+      const { columnsToBreakoutIntoTheirOwnTables, data, primaryKey } = config;
+      if (!primaryKey) { throw new Error('Breakout columns require using a primary key'); }
+
+      for (let i = 0; i < columnsToBreakoutIntoTheirOwnTables.length; i++) {
+        const { column, delimiter, databaseTableName } = columnsToBreakoutIntoTheirOwnTables[i];
+
+        // create the table
+        this.db.exec(`DROP TABLE IF EXISTS ${databaseTableName}; CREATE TABLE ${databaseTableName} ('${primaryKey}', 'value');`);
+
+        data.forEach((datapoint) => {
+          const theColumnWithData = datapoint[column] as string;
+          console.log(datapoint, column, datapoint[column]);
+          const theCollectionOfData = theColumnWithData.split(delimiter);
+          theCollectionOfData.forEach((item) => {
+            this.db.exec(`INSERT INTO ${databaseTableName} ('${primaryKey}', 'value') VALUES ('${datapoint[primaryKey]}', '${item.trim()}')`);
+          });
+        });
+      }
+    }
+  }
+
   createNormalizedTable(config: CreateNormalizedTableConfig) {
-    const { databaseNormalizedTableName, databaseNormalizedTableColumnsToSkip, primaryKey, data } = config;
+    const {
+      databaseNormalizedTableName, databaseNormalizedTableColumnsToSkip, primaryKey, data,
+    } = config;
     if (!databaseNormalizedTableName || !primaryKey) {
       return;
     }
@@ -78,10 +106,14 @@ export default class DatabaseInterface {
 
     // iterate through every row in the table, creating a new entry for each column
 
-    data.forEach(datapoint => {
+    data.forEach((datapoint) => {
       Object.keys(datapoint).forEach((key) => {
         if (datapoint[key]) {
-          if (key !== primaryKey && (!databaseNormalizedTableColumnsToSkip || !databaseNormalizedTableColumnsToSkip.find(c => c === key))) {
+          if (key !== primaryKey
+            && (
+              !databaseNormalizedTableColumnsToSkip || !databaseNormalizedTableColumnsToSkip.find(
+                (c) => c === key,
+              ))) {
             console.log(datapoint[primaryKey], key, datapoint[key]);
             this.db.exec(`INSERT INTO ${databaseNormalizedTableName} (${primaryKey}, field, value) VALUES ('${datapoint[primaryKey]}', '${key}', '${datapoint[key].replace(/'/g, "''")}')`);
           }
@@ -89,5 +121,4 @@ export default class DatabaseInterface {
       });
     });
   }
-
 }
