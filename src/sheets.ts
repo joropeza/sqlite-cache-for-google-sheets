@@ -1,4 +1,4 @@
-import { cloneDeep, filter, map } from 'lodash';
+import { cloneDeep, map } from 'lodash';
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
@@ -11,7 +11,10 @@ const getSheet = async (docId: string, sheetId: string, apiKey?: string): Promis
   return cloneDeep(rows);
 };
 
-const getAllEntities = async (apiKey: string, docId: string, sheetId: string, mapFunction: Function, primaryKey: string): Promise<Array<Object>> => {
+const getAllEntities = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  apiKey: string, docId: string, sheetId: string, mapFunction: Function, primaryKey: string,
+): Promise<Array<Object>> => {
   const data = await getSheet(docId, sheetId, apiKey);
   return map(data, mapFunction);
 };
