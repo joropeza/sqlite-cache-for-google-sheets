@@ -82,10 +82,12 @@ export default class DatabaseInterface {
         data.forEach((datapoint) => {
           const theColumnWithData = datapoint[column] as string;
           console.log(datapoint, column, datapoint[column]);
-          const theCollectionOfData = theColumnWithData.split(delimiter);
-          theCollectionOfData.forEach((item) => {
-            this.db.exec(`INSERT INTO ${databaseTableName} ('${primaryKey}', 'value') VALUES ('${datapoint[primaryKey]}', '${item.trim()}')`);
-          });
+          if (theColumnWithData) {
+            const theCollectionOfData = theColumnWithData.split(delimiter);
+            theCollectionOfData.forEach((item) => {
+              this.db.exec(`INSERT INTO ${databaseTableName} ('${primaryKey}', 'value') VALUES ('${datapoint[primaryKey]}', '${item.trim()}')`);
+            });
+          }
         });
       }
     }
