@@ -13,15 +13,31 @@ interface CreateNormalizedTableConfig {
   data: Array<any>
 }
 
+function isNumeric(str: any) {
+  if (typeof str !== 'string') return false;
+  return !Number.isNaN(str)
+    && !Number.isNaN(parseFloat(str));
+}
+
+function isPositiveInteger(n: any) {
+  // eslint-disable-next-line no-bitwise
+  return n >>> 0 === parseFloat(n);
+}
+
 const sqliteDatatype = (value: any) => {
-  if (Number.isInteger(value)) {
+  console.log('testing', value, Number.isInteger(value), Number.isFinite(value));
+  if (Number.isInteger(value) || isPositiveInteger(value)) {
     return 'INTEGER';
   }
-  if (Number.isFinite(value)) {
+  if (Number.isFinite(value) || isNumeric(value)) {
     return 'REAL';
   }
   return 'TEXT';
 };
+
+interface IHash {
+  [field: string]: string;
+}
 
 export default class DatabaseInterface {
   db: betterSqlLite.Database;
@@ -39,8 +55,31 @@ export default class DatabaseInterface {
 
   createTable(data: Array<any>) {
     let columnList = '';
+    const columnTypes = {} as IHash;
+
+    data.forEach((dataPoint: any) => {
+      Object.keys(data[0]).forEach((key) => {
+        const dataType = sqliteDatatype(dataPoint[key]);
+        // if any of the datapoints is text, make the whole column text
+        if (dataType === 'TEXT') {
+          columnTypes[key] = 'TEXT';
+        }
+        // if any of the datapoints is float, and the type is not text, make it a real
+        if (dataType === 'REAL') {
+          if (columnTypes[key] !== 'TEXT') {
+            columnTypes[key] = 'REAL';
+          }
+        }
+        if (dataType === 'INTEGER') {
+          if (!columnTypes[key]) {
+            columnTypes[key] = 'INTEGER';
+          }
+        }
+      });
+    });
+
     Object.keys(data[0]).forEach((key) => {
-      columnList += `'${key}' ${sqliteDatatype(data[1][key])},`; // TODO: primary key
+      columnList += `'${key}' ${columnTypes[key]},`; // TODO: primary key
     });
     // remove trailing commas
     columnList = columnList.substring(0, columnList.length - 1);

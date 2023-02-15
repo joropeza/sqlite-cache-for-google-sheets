@@ -5,8 +5,8 @@ import { createDatabase } from './main';
 require('dotenv').config();
 
 const mapFunction = (match: any) => ({
-  date: match.Date,
-  tags: match.Tags,
+  day: match.Day,
+  amount: match.Amount,
 });
 
 const config = {
@@ -14,10 +14,11 @@ const config = {
   docId: process.env.DOC_ID || '',
   sheetId: process.env.DAYS_SHEET_ID || '',
   mapFunction,
-  primaryKey: 'date',
+  primaryKey: 'day',
   databaseTableName: 'days',
   databaseFilename: './cache.db',
-  columnsToBreakoutIntoTheirOwnTables: [{ column: 'tags', delimiter: ',', databaseTableName: 'tags' }],
+  // columnsToBreakoutIntoTheirOwnTables:
+  // [{ column: 'tags', delimiter: ',', databaseTableName: 'tags' }],
 };
 
 (async () => {
