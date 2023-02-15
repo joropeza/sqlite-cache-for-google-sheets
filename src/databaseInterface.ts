@@ -79,7 +79,7 @@ export default class DatabaseInterface {
     });
 
     Object.keys(data[0]).forEach((key) => {
-      columnList += `'${key}' ${columnTypes[key]},`; // TODO: primary key
+      columnList += `'${key}' ${columnTypes[key] || 'TEXT'},`; // TODO: primary key
     });
     // remove trailing commas
     columnList = columnList.substring(0, columnList.length - 1);
