@@ -25,7 +25,7 @@ function isPositiveInteger(n: any) {
 }
 
 const sqliteDatatype = (value: any) => {
-  if (!value) { return value; }
+  if (!value && value !== 0) { return value; }
   if (Number.isInteger(value) || isPositiveInteger(value)) {
     return 'INTEGER';
   }

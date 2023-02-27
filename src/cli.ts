@@ -5,10 +5,8 @@ import { createDatabase } from './main';
 require('dotenv').config();
 
 const mapFunction = (match: any) => ({
-  fdcId: match.fdc_id,
-  nutrientId: match.nutrient_id,
-  amount: match.amount && parseFloat(match.amount),
-  derivationId: match.derivation_id,
+  thing: match.id,
+  test: 0,
 });
 
 const config = {
