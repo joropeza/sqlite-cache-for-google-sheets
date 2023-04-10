@@ -3,11 +3,16 @@
 
 Google Sheets is a rapid, albeit guardrail-less way of entering data from the browser. Using Google Forms gives it nice guardrails. This library makes hacking on a Sheet or set of Sheets locally quick and easy, loading once and providing a cache layer to issue queries against.
 
-This is one of those highly opinionated libraries that either works for you or it doesn't. I think I've designed a pretty clean API. It works for my use case which is to rapidly develop apps and data science experiments on top of data that myself or others have stored in Google Sheets. It fails the simple building blocks rule and I know it; it's a complex piece that might be too specialized to one person's uses cases. If you suspect it won't work for your use case, it probably won't.
+Example use case:
 
-Using the second (1th) data point to infer type is hacky.
+- You have a bunch of data in a Google Sheet
+- You want a local development workflow that's fast and doesn't depend on querying Google Sheets at runtime
+- Your schema is unresolved or otherwise may change significantly
+- You plan to add data to your schema during development
 
-Await the whole shebang prior to mounting your express app or graphql server or whatever your backend layer is.
+This is one of those highly opinionated libraries that either works for you or it doesn't. It works for my use case which is to rapidly develop apps and data science experiments on top of data that myself or others have stored in Google Sheets. It fails the simple building blocks rule and I know it; it's a complex piece that might be too specialized to one person's uses cases. If you suspect it won't work for your use case, it probably won't.
+
+Await the thing prior to mounting your express app or graphql server or whatever your backend layer is.
 
 Here's a simple example of some consumer code:
 

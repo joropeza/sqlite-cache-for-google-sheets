@@ -39,6 +39,11 @@ interface IHash {
   [field: string]: string;
 }
 
+// Make a string safe for SQLLite by escaping single quotes etc
+function safeForSQLLite(str?: string) {
+  return str ? str.replace(/'/g, "''") : undefined;
+}
+
 export default class DatabaseInterface {
   db: betterSqlLite.Database;
 
@@ -120,11 +125,10 @@ export default class DatabaseInterface {
 
         data.forEach((datapoint) => {
           const theColumnWithData = datapoint[column] as string;
-          console.log(datapoint, column, datapoint[column]);
           if (theColumnWithData) {
             const theCollectionOfData = theColumnWithData.split(delimiter);
             theCollectionOfData.forEach((item) => {
-              this.db.exec(`INSERT INTO ${databaseTableName} ('${primaryKey}', 'value') VALUES ('${datapoint[primaryKey]}', '${item.trim()}')`);
+              this.db.exec(`INSERT INTO ${databaseTableName} ('${primaryKey}', 'value') VALUES ('${safeForSQLLite(datapoint[primaryKey])}', '${safeForSQLLite(item.trim())}')`);
             });
           }
         });
