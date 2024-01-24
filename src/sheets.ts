@@ -1,21 +1,25 @@
 import { cloneDeep, map } from 'lodash';
 
-const { GoogleSpreadsheet } = require('google-spreadsheet');
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { JWT } from 'google-auth-library';
 
-const getSheet = async (docId: string, sheetId: string, apiKey?: string): Promise<Array<any>> => {
-  const doc = new GoogleSpreadsheet(docId);
-  doc.useApiKey(apiKey);
+const getSheet = async (docId: string, sheetId: string, authMethod: string | JWT): Promise<Array<any>> => {
+  let auth;
+  if (typeof authMethod === 'string') {
+    auth = { apiKey: authMethod };
+  } else {
+    auth = authMethod;
+  }
+  const doc = new GoogleSpreadsheet(docId, auth);
   await doc.loadInfo();
-  const sheet = doc.sheetsById[sheetId];
+  const sheet = doc.sheetsById[Number(sheetId)]; // Explicitly specify the type of the index expression as 'number'
   const rows = await sheet.getRows();
   return cloneDeep(rows);
 };
 
 const getAllEntities = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  apiKey: string, docId: string, sheetId: string, mapFunction: Function, primaryKey: string,
-): Promise<Array<Object>> => {
-  const data = await getSheet(docId, sheetId, apiKey);
+  authMethod: string | JWT, docId: string, sheetId: string, mapFunction: Function, primaryKey: string): Promise<Array<Object>> => {
+  const data = await getSheet(docId, sheetId, authMethod);
   return map(data, mapFunction);
 };
 

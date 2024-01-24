@@ -21,8 +21,6 @@ import express from 'express';
 
 import { createDatabase } from 'sqlite-cache-for-google-sheets';
 
-import { mapFunction } from './mappers';
-
 import {
   typeDefs,
   resolvers,
@@ -31,6 +29,11 @@ import {
 const { ApolloServer } = require('apollo-server-express');
 
 require('dotenv').config();
+
+const mapFunction = (row) => ({
+  name: row.get("Name"),
+  tags: row.get("Tags"),
+});
 
 const config = {
   apiKey: process.env.SHEETS_API_KEY || '',

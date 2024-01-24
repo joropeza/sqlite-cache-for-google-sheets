@@ -4,24 +4,25 @@ import { createDatabase } from './main';
 
 require('dotenv').config();
 
-const mapFunction = (match: any) => ({
-  thing: match.id,
-  test: 0,
+const mapFunction = (row: any) => ({
+  name: row.get("Name"),
+  tags: row.get("Tags"),
 });
 
 const config = {
-  apiKey: process.env.SHEETS_API_KEY || '',
+  serviceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
+  serviceAccountKey: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/gm, '\n'),
   docId: process.env.DOC_ID || '',
   sheetId: process.env.DAYS_SHEET_ID || '',
   mapFunction,
-  primaryKey: 'day',
-  databaseTableName: 'days',
+  primaryKey: 'name',
+  databaseTableName: 'names',
   databaseFilename: './cache.db',
-  // columnsToBreakoutIntoTheirOwnTables:
-  // [{ column: 'tags', delimiter: ',', databaseTableName: 'tags' }],
+  columnsToBreakoutIntoTheirOwnTables: [{ column: 'tags', delimiter: ',', databaseTableName: 'tags' }],
 };
 
 (async () => {
   const db = await createDatabase(config);
-  console.log(db);
+  const rows = db.prepare('SELECT * FROM names').all();
+  console.log(db, rows.length);
 })();

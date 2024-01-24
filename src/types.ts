@@ -5,7 +5,9 @@ export interface BreakoutColumn {
 }
 
 export type ConfigInterface = {
-  apiKey: string,
+  apiKey?: string,
+  serviceAccountEmail?: string,
+  serviceAccountKey?: string,
   docId: string,
   sheetId: string,
   mapFunction: Function,
